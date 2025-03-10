@@ -7,11 +7,188 @@
     
     <language>en</language>
     <copyright>Copyright 2025, Calvin Tran</copyright>
-    <lastBuildDate>Wed, 05 Feb 2025 14:03:13 +0100</lastBuildDate>
+    <lastBuildDate>Mon, 10 Mar 2025 12:22:37 +0100</lastBuildDate>
     <generator>Hugo - gohugo.io</generator>
     <docs>http://cyber.harvard.edu/rss/rss.html</docs>
     <atom:link href="http://localhost:1313//atom.xml" rel="self" type="application/atom+xml"/>
     
+    
+    <item>
+      <title>When Fairness Meets Privacy</title>
+      <link>http://localhost:1313/posts/when_fairness_meets_privacy/</link>
+      <description>&lt;style TYPE=&#34;text/css&#34;&gt;
+ code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+ &lt;/style&gt;
+ &lt;script type=&#34;text/x-mathjax-config&#34;&gt;
+ MathJax.Hub.Config({
+     tex2jax: {
+         inlineMath: [[&#39;$&#39;,&#39;$&#39;], [&#39;\\(&#39;,&#39;\\)&#39;]],
+         skipTags: [&#39;script&#39;, &#39;noscript&#39;, &#39;style&#39;, &#39;textarea&#39;, &#39;pre&#39;] // removed &#39;code&#39; entry
+     }
+ });
+ MathJax.Hub.Queue(function() {
+     var all = MathJax.Hub.getAllJax(), i;
+     for(i = 0; i &lt; all.length; i += 1) {
+         all[i].SourceElement().parentNode.className += &#39; has-jax&#39;;
+     }
+ });
+ &lt;/script&gt;
+ &lt;script type=&#34;text/javascript&#34; src=&#34;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML-full&#34;&gt;&lt;/script&gt;
+&lt;h1 style=&#34;font-size: 36px;&#34;&gt;When Fairness Meets Privacy: A Double-Edged Sword in Machine Learning&lt;/h1&gt;
+&lt;h1 style=&#34;font-size: 24px;&#34;&gt;Authors: Vincent Lagarde &amp; Boyenval Thibaut&lt;/h1&gt;
+&lt;h2 id=&#34;table-of-contents&#34;&gt;Table of Contents&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;&lt;a href=&#34;#1-introduction-fairness-or-privacy-pick-your-poison&#34;&gt;Introduction: Fairness or Privacy—Pick Your Poison?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#2-algorithmic-fairness-a-noble-goal-that-cuts-both-ways&#34;&gt;Algorithmic Fairness: A Noble Goal That Cuts Both Ways&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#3-membership-inference-attacks-the-silent-thief-of-privacy&#34;&gt;Membership Inference Attacks: The Silent Thief of Privacy&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#4-the-birth-of-a-new-threat-fairness-discrepancy-membership-inference-attacks-fd-mia&#34;&gt;The Birth of a New Threat: Fairness Discrepancy Membership Inference Attacks (FD-MIA)&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#5-experimental-findings-how-fairness-opens-the-door-to-attackers&#34;&gt;Experimental Findings: How Fairness Opens the Door to Attackers&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#6-the-future-of-fairness-and-privacy-can-we-have-both&#34;&gt;The Future of Fairness and Privacy: Can We Have Both?&lt;/a&gt;&lt;/li&gt;
+&lt;li&gt;&lt;a href=&#34;#7-conclusion-walking-the-razors-edge&#34;&gt;Conclusion: Walking the Razor’s Edge&lt;/a&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;1-introduction-fairness-or-privacypick-your-poison&#34;&gt;1. Introduction: Fairness or Privacy—Pick Your Poison?&lt;/h2&gt;
+&lt;p&gt;Imagine stepping into a high-tech courtroom in 2024. The AI judge, designed to be perfectly fair, renders unbiased decisions. But then, a hacker in the back row smirks—because that same fairness-enhancing mechanism just leaked private data about every case it trained on.&lt;/p&gt;
+&lt;p&gt;Fairness and privacy in AI are like the two ends of a seesaw: push too hard on one side, and the other rises uncontrollably. &lt;strong&gt;Recent research reveals a disturbing paradox: making a model fairer can also make it leak more private information.&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;This blog explores how fairness in machine learning, despite its good intentions, can introduce &lt;strong&gt;Membership Inference Attacks (MIAs)&lt;/strong&gt;. Worse still, it uncovers a devastating new attack—&lt;strong&gt;Fairness Discrepancy Membership Inference Attack (FD-MIA)&lt;/strong&gt;—that exploits fairness interventions to &lt;strong&gt;make privacy breaches even more effective&lt;/strong&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;2-algorithmic-fairness-a-noble-goal-that-cuts-both-ways&#34;&gt;2. Algorithmic Fairness: A Noble Goal That Cuts Both Ways&lt;/h2&gt;
+&lt;p&gt;Fairness in AI is like forging a perfect sword—it must be balanced, precise, and just. Researchers have developed &lt;strong&gt;in-processing fairness interventions&lt;/strong&gt;, which modify the training process to remove biases in model predictions. These methods act like master swordsmiths, hammering out the unwanted imperfections in AI decision-making.&lt;/p&gt;
+&lt;p&gt;However, every sword has two edges. These fairness techniques do not just eliminate biases—they also alter how models respond to data. This change in behavior can create exploitable patterns that adversaries can use to infer whether a specific individual was part of the training data. In short, while fairness dulls one blade (bias), it sharpens another (privacy risk).&lt;/p&gt;
+&lt;p&gt;Mathematically, fairness interventions often involve introducing constraints into the loss function: $ \mathcal{L}&lt;em&gt;{\text{fair}} = \mathcal{L}&lt;/em&gt;{\text{orig}} + \lambda \cdot \mathcal{L}_{\text{fairness}} $&lt;/p&gt;
+&lt;p&gt;where:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$ \mathcal{L}_{\text{orig}} $ is the original loss function (e.g., cross-entropy loss for classification tasks).&lt;/li&gt;
+&lt;li&gt;$ \mathcal{L}_{\text{fairness}} $ is a fairness penalty term, which ensures that predictions are balanced across different demographic groups.&lt;/li&gt;
+&lt;li&gt;$ \lambda $ is a hyperparameter controlling the trade-off between accuracy and fairness.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Common fairness constraints include &lt;strong&gt;Equalized Odds&lt;/strong&gt;, which ensures that true positive and false positive rates are equal across groups:&lt;/p&gt;
+&lt;p&gt;$$
+P(\hat{Y} = 1 | Y = 1, S = s_0) = P(\hat{Y} = 1 | Y = 1, S = s_1)
+$$&lt;/p&gt;
+&lt;p&gt;where $ S $ represents a sensitive attribute (e.g., gender or race).&lt;/p&gt;
+&lt;p&gt;While these interventions improve fairness, they also alter the confidence distribution of model predictions—&lt;strong&gt;a fact that attackers can exploit&lt;/strong&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;3-membership-inference-attacks-the-silent-thief-of-privacy&#34;&gt;3. Membership Inference Attacks: The Silent Thief of Privacy&lt;/h2&gt;
+&lt;p&gt;Imagine a thief who can tell, just by looking at a house, whether you&amp;rsquo;ve recently installed a new security system. &lt;strong&gt;Membership Inference Attacks (MIAs)&lt;/strong&gt; work the same way: they analyze a model’s outputs to determine if a given data point was part of its training set.&lt;/p&gt;
+&lt;p&gt;A traditional MIA exploits &lt;strong&gt;confidence scores&lt;/strong&gt;—the probabilities that a model assigns to different predictions. The intuition is simple: models tend to be more confident on data they have seen during training. Given a target model $ T $ and a queried sample $ x $, an attacker computes:&lt;/p&gt;
+&lt;p&gt;$$
+M(x) = 1 \text{ if } A(T(x)) &amp;gt; \tau
+$$&lt;/p&gt;
+&lt;p&gt;where:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$ A(T(x)) $ is a decision function (often a threshold on the confidence score).&lt;/li&gt;
+&lt;li&gt;$ \tau $ is a predefined threshold.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h3 id=&#34;why-traditional-mias-fail-on-fair-models&#34;&gt;Why Traditional MIAs Fail on Fair Models&lt;/h3&gt;
+&lt;p&gt;Fairness interventions introduce &lt;strong&gt;more uncertainty&lt;/strong&gt; into the model’s predictions. This causes:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Lower confidence scores overall&lt;/strong&gt;, making it harder for attackers to distinguish between training and non-training samples.&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;More uniform confidence distributions&lt;/strong&gt;, which means attackers lose their key signal.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;Thus, fairness-enhanced models resist traditional MIAs. But this protection is not foolproof—&lt;strong&gt;a new, more dangerous attack lurks in the shadows&lt;/strong&gt;.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;4-the-birth-of-a-new-threat-fairness-discrepancy-membership-inference-attacks-fd-mia&#34;&gt;4. The Birth of a New Threat: Fairness Discrepancy Membership Inference Attacks (FD-MIA)&lt;/h2&gt;
+&lt;p&gt;If traditional MIAs are blunt weapons, &lt;strong&gt;FD-MIA is a scalpel.&lt;/strong&gt; It exploits the discrepancies between a biased model and a fairness-enhanced one.&lt;/p&gt;
+&lt;h3 id=&#34;how-does-fd-mia-work&#34;&gt;How does FD-MIA work?&lt;/h3&gt;
+&lt;p&gt;Fairness interventions shift model predictions differently for training and non-training data. This creates a &lt;strong&gt;gap&lt;/strong&gt; between how biased and fair models behave for the same inputs. An attacker, armed with knowledge of both models, can exploit this difference to infer membership with high accuracy.&lt;/p&gt;
+&lt;p&gt;Mathematically, FD-MIA extends membership prediction by comparing prediction shifts between biased and fair models:&lt;/p&gt;
+&lt;p&gt;$$
+M(x) = 1 \text{ if } |T_{\text{bias}}(x) - T_{\text{fair}}(x)| &amp;gt; \tau
+$$&lt;/p&gt;
+&lt;p&gt;where:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;$ T_{\text{bias}}(x) $ and $ T_{\text{fair}}(x) $ are the predictions from the biased and fair models, respectively.&lt;/li&gt;
+&lt;li&gt;$ \tau $ is a threshold chosen by the attacker.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;The key insight is that &lt;strong&gt;fairness interventions cause systematic shifts&lt;/strong&gt; in model confidence, creating a measurable pattern that attackers can exploit.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;5-experimental-findings-how-fairness-opens-the-door-to-attackers&#34;&gt;5. Experimental Findings: How Fairness Opens the Door to Attackers&lt;/h2&gt;
+&lt;p&gt;The study conducted extensive experiments across &lt;strong&gt;six datasets, three attack methods, and five fairness approaches&lt;/strong&gt;, testing over &lt;strong&gt;160 models&lt;/strong&gt;. The results were shocking:&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Fair models were significantly harder to attack using traditional MIAs.&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;FD-MIA, however, dramatically increased attack success rates—fairness actually made models more vulnerable!&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;The greater the fairness intervention, the wider the discrepancy between biased and fair models, making FD-MIA even more effective.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;In simple terms: &lt;strong&gt;making a model fairer may paradoxically make it leak more private information.&lt;/strong&gt; A cruel irony for those trying to do the right thing.&lt;/p&gt;
+&lt;hr&gt;
+&lt;h2 id=&#34;6-the-future-of-fairness-and-privacy-can-we-have-both&#34;&gt;6. The Future of Fairness and Privacy: Can We Have Both?&lt;/h2&gt;
+&lt;p&gt;The million-dollar question: &lt;strong&gt;Can we balance fairness and privacy without sacrificing one for the other?&lt;/strong&gt;&lt;/p&gt;
+&lt;p&gt;The researchers propose two key defenses:&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Restricting Information Access&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Limiting confidence score outputs reduces the information available to attackers.&lt;/li&gt;
+&lt;/ul&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;&lt;strong&gt;Differential Privacy (DP)&lt;/strong&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;By injecting noise into model training, DP-SGD (Differentially Private Stochastic Gradient Descent) helps obscure membership information:&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;$$
+\tilde{g}_t = g_t + \mathcal{N}(0, \sigma^2 I)
+$$&lt;/p&gt;
+&lt;p&gt;where $ g_t $ is the original gradient and $ \mathcal{N}(0, \sigma^2 I) $ is Gaussian noise added to prevent membership inference.&lt;/p&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;p&gt;While these methods help, they come with trade-offs: &lt;strong&gt;too much privacy protection can lower fairness and accuracy, while too little leaves models vulnerable.&lt;/strong&gt; The challenge ahead is designing AI systems that can balance both.&lt;/p&gt;
+&lt;hr&gt;
+</description>
+      <author>Students from M2 Data Science IP Paris</author>
+      <guid>http://localhost:1313/posts/when_fairness_meets_privacy/</guid>
+      <pubDate>Mon, 10 Mar 2025 12:22:37 +0100</pubDate>
+    </item>
+    
+    <item>
+      <title>How to augment my dataset?</title>
+      <link>http://localhost:1313/posts/mixupdatacalibration/</link>
+      <description>&lt;style TYPE=&#34;text/css&#34;&gt;
+code.has-jax {font: inherit; font-size: 100%; background: inherit; border: inherit;}
+&lt;/style&gt;
+&lt;script type=&#34;text/x-mathjax-config&#34;&gt;
+MathJax.Hub.Config({
+    tex2jax: {
+        inlineMath: [[&#39;$&#39;,&#39;$&#39;], [&#39;\\(&#39;,&#39;\\)&#39;]],
+        displayMath: [[&#39;$$&#39;,&#39;$$&#39;], [&#39;\\[&#39;,&#39;\\]&#39;]],
+        skipTags: [&#39;script&#39;, &#39;noscript&#39;, &#39;style&#39;, &#39;textarea&#39;, &#39;pre&#39;] // removed &#39;code&#39; entry
+    }
+});
+MathJax.Hub.Queue(function() {
+    var all = MathJax.Hub.getAllJax(), i;
+    for(i = 0; i &lt; all.length; i += 1) {
+        all[i].SourceElement().parentNode.className += &#39; has-jax&#39;;
+    }
+});
+&lt;/script&gt;
+&lt;script type=&#34;text/javascript&#34; src=&#34;https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.4/MathJax.js?config=TeX-AMS_HTML-full&#34;&gt;&lt;/script&gt;
+&lt;h1 id=&#34;authors--tristan-waddington-fabien-lagnieu--dimitri-henrard-iratchet&#34;&gt;Authors : &lt;em&gt;Tristan Waddington, Fabien Lagnieu &amp;amp; Dimitri Henrard-Iratchet&lt;/em&gt;&lt;/h1&gt;
+&lt;h3 id=&#34;paper-comment-on-the-research-paper-tailoring-mixup-to-data-for-calibrationhttpsarxivorgabs231101434-written-by-quentin-bouniot-pavlo-mozharovskyi--florence-dalché-buc-from-ltci-télécom-paris-institut-polytechnique-de-paris-france&#34;&gt;Paper: Comment on the research paper: &lt;a href=&#34;https://arxiv.org/abs/2311.01434&#34;&gt;&lt;strong&gt;Tailoring Mixup to Data for Calibration&lt;/strong&gt;&lt;/a&gt;, written by &lt;em&gt;Quentin Bouniot, Pavlo Mozharovskyi &amp;amp; Florence d’Alché-Buc&lt;/em&gt;, from LTCI, Télécom Paris, Institut Polytechnique de Paris, France&lt;/h3&gt;
+&lt;p&gt;TODO: insert table of contents&lt;/p&gt;
+&lt;h1 id=&#34;introduction&#34;&gt;Introduction&lt;/h1&gt;
+&lt;p&gt;&lt;img
+  src=&#34;./images/MixUpDataCalibration/AI_introvert.png&#34;
+  alt=&#34;Test image Mkdown&#34;
+  loading=&#34;lazy&#34;
+  decoding=&#34;async&#34;
+  class=&#34;full-width&#34;
+/&gt;
+
+
+Let&amp;rsquo;s do it.&lt;/p&gt;
+&lt;p align=&#34;center&#34;&gt;
+  &lt;img src=&#34;./images/MixUpDataCalibration/AI_introvert.png&#34; alt=&#34;Test image mathematical&#34;&gt;
+&lt;/p&gt;
+&lt;h1 id=&#34;main-part&#34;&gt;Main part&lt;/h1&gt;
+&lt;p&gt;Test LaTeX : $\sigma \left( \frac{1}{2}\right)$&lt;/p&gt;
+&lt;p&gt;$$\mathbb{R}^3 $$&lt;/p&gt;
+&lt;h1 id=&#34;conclusion&#34;&gt;Conclusion&lt;/h1&gt;
+</description>
+      <author>Students from M2 Data Science IP Paris</author>
+      <guid>http://localhost:1313/posts/mixupdatacalibration/</guid>
+      <pubDate>Wed, 05 Feb 2025 14:03:13 +0100</pubDate>
+    </item>
     
     <item>
       <title>Axiomatic Explanations for Visual Search, Retrieval and Similarity Learning</title>
