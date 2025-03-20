@@ -41,7 +41,7 @@ draft = false
 
 ---
 
-## 1. Introduction: Fairness or Privacy Pick Your Poison
+## 1. Introduction: Fairness or Privacy - Pick Your Poison
 
 Imagine stepping into a high-tech courtroom in 2024. The AI judge, designed to be perfectly fair, renders unbiased decisions. But then, a hacker in the back row smirks—because that same fairness-enhancing mechanism just leaked private data about every case it trained on. 
 
