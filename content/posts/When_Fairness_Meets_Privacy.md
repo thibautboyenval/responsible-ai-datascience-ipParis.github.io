@@ -26,6 +26,8 @@ draft = false
 
 <h1 style="font-size: 36px;">When Fairness Meets Privacy: A Double-Edged Sword in Machine Learning</h1>
 
+*This blog is based on and aims to present the key insights from the paper: **When Fairness Meets Privacy: Exploring Privacy Threats in Fair Binary Classifiers via Membership Inference Attacks** by Tian et al. (2023) [^principal]. The study investigates how fairness-aware models can introduce new privacy risks, specifically through membership inference attacks. By summarizing the main findings and implications, this blog provides an accessible overview of the paper’s contributions and their significance for machine learning security and ethical AI development. For full details, refer to the original publication [here](https://arxiv.org/pdf/2311.03865).*
+
 <h1 style="font-size: 24px;">Authors: Lagarde Vincent & Boyenval Thibaut</h1>
 
 ## Table of Contents
@@ -39,7 +41,7 @@ draft = false
 
 ---
 
-## 1. Introduction: Fairness or Privacy—Pick Your Poison?
+## 1. Introduction: Fairness or Privacy Pick Your Poison
 
 Imagine stepping into a high-tech courtroom in 2024. The AI judge, designed to be perfectly fair, renders unbiased decisions. But then, a hacker in the back row smirks—because that same fairness-enhancing mechanism just leaked private data about every case it trained on. 
 
@@ -55,20 +57,19 @@ Fairness in AI is like forging a perfect sword—it must be balanced, precise, a
 
 However, every sword has two edges. These fairness techniques do not just eliminate biases—they also alter how models respond to data. This change in behavior can create exploitable patterns that adversaries can use to infer whether a specific individual was part of the training data. In short, while fairness dulls one blade (bias), it sharpens another (privacy risk).
 
-Mathematically, fairness interventions often involve introducing constraints into the loss function: $ \mathcal{L}_{\text{fair}} = \mathcal{L}_{\text{orig}} + \lambda \cdot \mathcal{L}_{\text{fairness}} $
+Mathematically, fairness interventions often involve introducing constraints into the loss function:
+$\mathcal{L}_{\text{fair}} = \mathcal{L}_{\text{orig}} + \lambda \cdot \mathcal{L}_{\text{fairness}}$$
 
 where:
-- $ \mathcal{L}_{\text{orig}} $ is the original loss function (e.g., cross-entropy loss for classification tasks).
-- $ \mathcal{L}_{\text{fairness}} $ is a fairness penalty term, which ensures that predictions are balanced across different demographic groups.
-- $ \lambda $ is a hyperparameter controlling the trade-off between accuracy and fairness.
+- $\mathcal{L}_{\text{orig}}$ is the original loss function (e.g., cross-entropy loss for classification tasks).
+- $\mathcal{L}_{\text{fairness}}$ is a fairness penalty term, which ensures that predictions are balanced across different demographic groups.
+- $\lambda$ is a hyperparameter controlling the trade-off between accuracy and fairness.
 
 Common fairness constraints include **Equalized Odds**, which ensures that true positive and false positive rates are equal across groups:
 
-$$
-P(\hat{Y} = 1 | Y = 1, S = s_0) = P(\hat{Y} = 1 | Y = 1, S = s_1)
-$$
+$$P(\hat{Y} = 1 | Y = 1, S = s_0) = P(\hat{Y} = 1 | Y = 1, S = s_1)$$
 
-where $ S $ represents a sensitive attribute (e.g., gender or race).
+where $S$ represents a sensitive attribute (e.g., gender or race).
 
 While these interventions improve fairness, they also alter the confidence distribution of model predictions—**a fact that attackers can exploit**.
 
@@ -78,15 +79,13 @@ While these interventions improve fairness, they also alter the confidence distr
 
 Imagine a thief who can tell, just by looking at a house, whether you've recently installed a new security system. **Membership Inference Attacks (MIAs)** work the same way: they analyze a model’s outputs to determine if a given data point was part of its training set.
 
-A traditional MIA exploits **confidence scores**—the probabilities that a model assigns to different predictions. The intuition is simple: models tend to be more confident on data they have seen during training. Given a target model $ T $ and a queried sample $ x $, an attacker computes:
+A traditional MIA exploits **confidence scores**—the probabilities that a model assigns to different predictions. The intuition is simple: models tend to be more confident on data they have seen during training. Given a target model $T$ and a queried sample $x$, an attacker computes:
 
-$$
-M(x) = 1 \text{ if } A(T(x)) > \tau
-$$
+$$M(x) = 1 \text{ if } A(T(x)) > \tau$$
 
 where:
-- $ A(T(x)) $ is a decision function (often a threshold on the confidence score).
-- $ \tau $ is a predefined threshold.
+- $A(T(x))$ is a decision function (often a threshold on the confidence score).
+- $\tau$ is a predefined threshold.
 
 ### Why Traditional MIAs Fail on Fair Models
 
@@ -108,13 +107,11 @@ Fairness interventions shift model predictions differently for training and non-
 
 Mathematically, FD-MIA extends membership prediction by comparing prediction shifts between biased and fair models:
 
-$$
-M(x) = 1 \text{ if } |T_{\text{bias}}(x) - T_{\text{fair}}(x)| > \tau
-$$
+$$M(x) = 1 \text{ if } |T_{\text{bias}}(x) - T_{\text{fair}}(x)| > \tau$$
 
 where:
-- $ T_{\text{bias}}(x) $ and $ T_{\text{fair}}(x) $ are the predictions from the biased and fair models, respectively.
-- $ \tau $ is a threshold chosen by the attacker.
+- $T_{\text{bias}}(x) $ and $ T_{\text{fair}}(x)$ are the predictions from the biased and fair models, respectively.
+- $\tau$ is a threshold chosen by the attacker.
 
 The key insight is that **fairness interventions cause systematic shifts** in model confidence, creating a measurable pattern that attackers can exploit.
 
@@ -144,16 +141,14 @@ The researchers propose two key defenses:
 2. **Differential Privacy (DP)**  
    - By injecting noise into model training, DP-SGD (Differentially Private Stochastic Gradient Descent) helps obscure membership information:
 
-   $$
-   \tilde{g}_t = g_t + \mathcal{N}(0, \sigma^2 I)
-   $$
+      $$\tilde{g}_t = g_t + \mathcal{N}(0, \sigma^2 I)$$
 
-   where $ g_t $ is the original gradient and $ \mathcal{N}(0, \sigma^2 I) $ is Gaussian noise added to prevent membership inference.
+     where $g_t$ is the original gradient and $\mathcal{N}(0, \sigma^2 I)$ is Gaussian noise added to prevent membership inference.
 
 While these methods help, they come with trade-offs: **too much privacy protection can lower fairness and accuracy, while too little leaves models vulnerable.** The challenge ahead is designing AI systems that can balance both.
 
 ---
-
-[^principal]: H. Tian, G. Zhang, B. Liu, T. Zhu, M. Ding, and W. Zhou, "When Fairness Meets Privacy: Exploring Privacy Threats in Fair Binary Classifiers via Membership Inference Attacks," *arXiv e-prints*, Art. no. arXiv:2311.03865, 2023. [doi:10.48550/arXiv.2311.03865](https://arxiv.org/pdf/2311.03865). [↩](#principal)
+## References
+[^principal]: H. Tian, G. Zhang, B. Liu, T. Zhu, M. Ding, and W. Zhou, "When Fairness Meets Privacy: Exploring Privacy Threats in Fair Binary Classifiers via Membership Inference Attacks", *arXiv e-prints*, Art. no. [arXiv.2311.03865](https://arxiv.org/pdf/2311.03865).
 
 
