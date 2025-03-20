@@ -41,9 +41,12 @@ draft = false
 
 ---
 
-## 1. Introduction: Fairness or Privacy - Pick Your Poison
+## 1. Introduction: Fairness or Privacy Pick Your Poison
+>*It is double pleasure to deceive the deceiver.* — Niccolò Machiavelli.
 
-Imagine stepping into a high-tech courtroom in 2024. The AI judge, designed to be perfectly fair, renders unbiased decisions. But then, a hacker in the back row smirks—because that same fairness-enhancing mechanism just leaked private data about every case it trained on. 
+This paradox of attack and defense perfectly applies to the interplay between fairness and privacy in machine learning.
+
+Imagine stepping into a high-tech courtroom. The AI judge, designed to be perfectly fair, renders unbiased decisions. But then, a hacker in the back row smirks—because that same fairness-enhancing mechanism just leaked private data about every case it trained on. 
 
 Fairness and privacy in AI are like the two ends of a seesaw: push too hard on one side, and the other rises uncontrollably. **Recent research reveals a disturbing paradox: making a model fairer can also make it leak more private information.**
 
@@ -57,10 +60,11 @@ Fairness in AI is like forging a perfect sword—it must be balanced, precise, a
 
 However, every sword has two edges. These fairness techniques do not just eliminate biases—they also alter how models respond to data. This change in behavior can create exploitable patterns that adversaries can use to infer whether a specific individual was part of the training data. In short, while fairness dulls one blade (bias), it sharpens another (privacy risk).
 
-Mathematically, fairness interventions often involve introducing constraints into the loss function:
-$\mathcal{L}_{\text{fair}} = \mathcal{L}_{\text{orig}} + \lambda \cdot \mathcal{L}_{\text{fairness}}$$
+Mathematically, fairness interventions often involve introducing constraints into the loss function:   
 
-where:
+$$L_\text{fair} = L_\text{orig} + \lambda \cdot \mathcal{L}_{\text{fairness}}$$
+
+where
 - $\mathcal{L}_{\text{orig}}$ is the original loss function (e.g., cross-entropy loss for classification tasks).
 - $\mathcal{L}_{\text{fairness}}$ is a fairness penalty term, which ensures that predictions are balanced across different demographic groups.
 - $\lambda$ is a hyperparameter controlling the trade-off between accuracy and fairness.
@@ -76,8 +80,10 @@ While these interventions improve fairness, they also alter the confidence distr
 ---
 
 ## 3. Membership Inference Attacks: The Silent Thief of Privacy
+🔐 A Parallel with Cryptography
+**Membership inference attacks (MIAs)** are to privacy what brute-force attacks are to passwords. Instead of guessing a password, they test thousands of combinations to see which one is good.
 
-Imagine a thief who can tell, just by looking at a house, whether you've recently installed a new security system. **Membership Inference Attacks (MIAs)** work the same way: they analyze a model’s outputs to determine if a given data point was part of its training set.
+MIAs work the same way: they analyze a model’s outputs to determine if a given data point was part of its training set.
 
 A traditional MIA exploits **confidence scores**—the probabilities that a model assigns to different predictions. The intuition is simple: models tend to be more confident on data they have seen during training. Given a target model $T$ and a queried sample $x$, an attacker computes:
 
@@ -110,7 +116,7 @@ Mathematically, FD-MIA extends membership prediction by comparing prediction shi
 $$M(x) = 1 \text{ if } |T_{\text{bias}}(x) - T_{\text{fair}}(x)| > \tau$$
 
 where:
-- $T_{\text{bias}}(x) $ and $ T_{\text{fair}}(x)$ are the predictions from the biased and fair models, respectively.
+- $T_{\text{bias}}(x)$ and $T_{\text{fair}}(x)$ are the predictions from the biased and fair models, respectively.
 - $\tau$ is a threshold chosen by the attacker.
 
 The key insight is that **fairness interventions cause systematic shifts** in model confidence, creating a measurable pattern that attackers can exploit.
@@ -133,6 +139,10 @@ In simple terms: **making a model fairer may paradoxically make it leak more pri
 
 The million-dollar question: **Can we balance fairness and privacy without sacrificing one for the other?**
 
+> *If you know the enemy and know yourself, you need not fear the result of a hundred battles.* — Sun Tzu.
+
+A better understanding of the link between fairness and privacy, as well as the potential and new attacks introduced by unbiased models, is already a solid step toward defending against threats. By understanding the underlying mechanisms, it becomes possible to counteract them.
+
 The researchers propose two key defenses:
 
 1. **Restricting Information Access**  
@@ -146,6 +156,8 @@ The researchers propose two key defenses:
      where $g_t$ is the original gradient and $\mathcal{N}(0, \sigma^2 I)$ is Gaussian noise added to prevent membership inference.
 
 While these methods help, they come with trade-offs: **too much privacy protection can lower fairness and accuracy, while too little leaves models vulnerable.** The challenge ahead is designing AI systems that can balance both.
+
+💡 Alternative approach: Fairness-Aware Differential Privacy (FADP) adapts noise levels based on protected groups, balancing privacy and fairness.
 
 ---
 ## References
