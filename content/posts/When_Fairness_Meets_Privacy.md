@@ -26,7 +26,7 @@ draft = false
 
 <h1 style="font-size: 36px;">When Fairness Meets Privacy: A Double-Edged Sword in Machine Learning</h1>
 
-<h1 style="font-size: 24px;">Authors: Vincent Lagarde & Boyenval Thibaut</h1>
+<h1 style="font-size: 24px;">Authors: Lagarde Vincent & Boyenval Thibaut</h1>
 
 ## Table of Contents
 1. [Introduction: Fairness or Privacy—Pick Your Poison?](#1-introduction-fairness-or-privacy-pick-your-poison)
@@ -153,5 +153,7 @@ The researchers propose two key defenses:
 While these methods help, they come with trade-offs: **too much privacy protection can lower fairness and accuracy, while too little leaves models vulnerable.** The challenge ahead is designing AI systems that can balance both.
 
 ---
+
+[^principal]: H. Tian, G. Zhang, B. Liu, T. Zhu, M. Ding, and W. Zhou, "When Fairness Meets Privacy: Exploring Privacy Threats in Fair Binary Classifiers via Membership Inference Attacks," *arXiv e-prints*, Art. no. arXiv:2311.03865, 2023. [doi:10.48550/arXiv.2311.03865](https://arxiv.org/pdf/2311.03865). [↩](#principal)
 
 
